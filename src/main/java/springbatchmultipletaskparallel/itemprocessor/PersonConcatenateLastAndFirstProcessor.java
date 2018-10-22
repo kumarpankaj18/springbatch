@@ -1,0 +1,18 @@
+package springbatchmultipletaskparallel.itemprocessor;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.stereotype.Component;
+import springbatchmultipletaskparallel.domain.Person;
+
+@Component
+@Slf4j
+public class PersonConcatenateLastAndFirstProcessor implements ItemProcessor<Person, Person> {
+    @Override
+    public Person process(Person person) throws Exception {
+
+        person.setLastFirstName(person.getLastName() + person.getFirstName());
+        log.info(person.toString());
+        return person;
+    }
+}

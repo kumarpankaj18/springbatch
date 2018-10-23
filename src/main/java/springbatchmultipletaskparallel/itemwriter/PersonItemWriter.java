@@ -10,7 +10,6 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.stereotype.Component;
 import springbatchmultipletaskparallel.domain.Person;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +39,8 @@ public class PersonItemWriter implements ItemWriter<Person> , StepExecutionListe
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             String str = objectMapper.writeValueAsString(personList);
-            stepExecution.getJobExecution().getExecutionContext().put("data", str);
+            stepExecution.getJobExecution().getExecutionContext().put("step2", str);
+            stepExecution.getJobExecution().getExecutionContext().put("step3", str);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

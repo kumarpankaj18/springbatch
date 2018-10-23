@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
-public class PersonItemReaderList implements ItemReader<Person> , StepExecutionListener {
+public class Step2Reader implements ItemReader<Person> , StepExecutionListener {
 
     private List<Person> personList;
 
@@ -31,7 +31,7 @@ public class PersonItemReaderList implements ItemReader<Person> , StepExecutionL
 
     @Override
     public void beforeStep(StepExecution stepExecution) {
-        String src =  stepExecution.getJobExecution().getExecutionContext().getString("data");
+        String src =  stepExecution.getJobExecution().getExecutionContext().getString("step2");
         ObjectMapper objectMapper = new ObjectMapper();
         JavaType type = objectMapper.getTypeFactory().
                 constructCollectionType(List.class, Person.class);

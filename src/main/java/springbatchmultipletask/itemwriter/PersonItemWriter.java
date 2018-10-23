@@ -42,7 +42,8 @@ public class PersonItemWriter implements ItemWriter<Person> , StepExecutionListe
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             String str = objectMapper.writeValueAsString(personList);
-            stepExecution.getJobExecution().getExecutionContext().put("data", str);
+            stepExecution.getJobExecution().getExecutionContext().put("step2", str);
+            stepExecution.getJobExecution().getExecutionContext().put("step3", str);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

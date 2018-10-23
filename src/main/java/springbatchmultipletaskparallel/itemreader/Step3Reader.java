@@ -1,4 +1,4 @@
-package springbatchmultipletask.itemreader;
+package springbatchmultipletaskparallel.itemreader;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,16 +9,13 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
-import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.stereotype.Component;
-import springbatchmultipletask.domain.Person;
-import springbatchmultipletask.itemwriter.PersonItemWriter;
+import springbatchmultipletaskparallel.domain.Person;
 
 import java.io.IOException;
 import java.util.List;
-
 @Component
-public class PersonItemReaderList implements ItemReader<Person> , StepExecutionListener {
+public class Step3Reader implements ItemReader<Person>, StepExecutionListener {
 
     private List<Person> personList;
 
@@ -33,7 +30,7 @@ public class PersonItemReaderList implements ItemReader<Person> , StepExecutionL
 
     @Override
     public void beforeStep(StepExecution stepExecution) {
-        String src =  stepExecution.getJobExecution().getExecutionContext().getString("data");
+        String src =  stepExecution.getJobExecution().getExecutionContext().getString("step3");
         ObjectMapper objectMapper = new ObjectMapper();
         JavaType type = objectMapper.getTypeFactory().
                 constructCollectionType(List.class, Person.class);

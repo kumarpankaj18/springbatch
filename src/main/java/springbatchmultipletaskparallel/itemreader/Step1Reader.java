@@ -1,4 +1,4 @@
-package springbatchmultipletask.itemreader;
+package springbatchmultipletaskparallel.itemreader;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.batch.item.ItemReader;
@@ -6,13 +6,14 @@ import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.stereotype.Component;
-import springbatchmultipletask.domain.Person;
+import springbatchmultipletaskparallel.domain.Person;
+
 
 @Component
-public class PersonItemReader implements ItemReader<Person> {
+public class Step1Reader implements ItemReader<Person> {
 
 
-    static int count  = 5;
+    static int count  = 10;
     static int i = 0;
     @Override
     public Person read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException

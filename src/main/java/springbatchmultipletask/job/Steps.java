@@ -9,8 +9,8 @@ import springbatchmultipletask.domain.Person;
 import springbatchmultipletask.itemprocessor.PersonConcatenateFirstAndLastProcessor;
 import springbatchmultipletask.itemprocessor.PersonConcatenateLastAndFirstProcessor;
 import springbatchmultipletask.itemprocessor.PersonToUpperProcessor;
-import springbatchmultipletask.itemreader.PersonItemReader;
-import springbatchmultipletask.itemreader.PersonItemReaderList;
+import springbatchmultipletask.itemreader.Step1Reader;
+import springbatchmultipletask.itemreader.Step2Reader;
 import springbatchmultipletask.itemwriter.PersonItemWriter;
 
 @Component
@@ -24,7 +24,7 @@ public class Steps {
     private PersonToUpperProcessor personItemProcessor;
 
     @Autowired
-    private PersonItemReader personItemReader;
+    private Step1Reader personItemReader;
 
     @Autowired
     private PersonItemWriter personItemWriter;
@@ -36,7 +36,7 @@ public class Steps {
     PersonConcatenateLastAndFirstProcessor personConcatenateLastAndFirstProcessor;
 
     @Autowired
-    PersonItemReaderList personItemReaderList;
+    Step2Reader personItemReaderList;
 
     @Bean
     public Step step1() {
@@ -83,7 +83,7 @@ public class Steps {
     }
 
     @Bean
-    public PersonItemReader reader() {
+    public Step1Reader reader() {
         return personItemReader;
     }
 
@@ -93,7 +93,7 @@ public class Steps {
     }
 
     @Bean
-    public PersonItemReaderList reader1() {
+    public Step2Reader reader1() {
         return personItemReaderList;
     }
 }

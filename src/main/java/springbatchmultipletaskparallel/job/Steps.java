@@ -10,12 +10,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
+
 import springbatchmultipletaskparallel.domain.Person;
 import springbatchmultipletaskparallel.itemprocessor.PersonConcatenateFirstAndLastProcessor;
 import springbatchmultipletaskparallel.itemprocessor.PersonConcatenateLastAndFirstProcessor;
 import springbatchmultipletaskparallel.itemprocessor.PersonToUpperProcessor;
-import springbatchmultipletaskparallel.itemreader.PersonItemReader;
-import springbatchmultipletaskparallel.itemreader.PersonItemReaderList;
+import springbatchmultipletaskparallel.itemreader.Step1Reader;
+import springbatchmultipletaskparallel.itemreader.Step2Reader;
+import springbatchmultipletaskparallel.itemreader.Step3Reader;
 import springbatchmultipletaskparallel.itemwriter.PersonItemWriter;
 
 @Component
@@ -29,7 +31,13 @@ public class Steps {
     private PersonToUpperProcessor personItemProcessor;
 
     @Autowired
-    private PersonItemReader personItemReader;
+    private Step1Reader step1Reader;
+
+    @Autowired
+    private Step2Reader step2Reader;
+
+    @Autowired
+    private Step3Reader step3Reader;
 
     @Autowired
     private PersonItemWriter personItemWriter;
@@ -40,8 +48,6 @@ public class Steps {
     @Autowired
     PersonConcatenateLastAndFirstProcessor personConcatenateLastAndFirstProcessor;
 
-    @Autowired
-    PersonItemReaderList personItemReaderList;
 
     @Bean
     public Step step1() {
@@ -66,7 +72,7 @@ public class Steps {
     public Step step3() {
         return stepBuilderFactory.get("step3")
                 .<Person, Person>chunk(10)
-                .reader(reader1())
+                .reader(reader2())
                 .processor(processor2())
                 .build();
     }
@@ -122,8 +128,8 @@ public class Steps {
     }
 
     @Bean
-    public PersonItemReader reader() {
-        return personItemReader;
+    public Step1Reader reader() {
+        return step1Reader;
     }
 
     @Bean
@@ -132,7 +138,12 @@ public class Steps {
     }
 
     @Bean
-    public PersonItemReaderList reader1() {
-        return personItemReaderList;
+    public Step2Reader reader1() {
+        return step2Reader;
+    }
+
+    @Bean
+    public Step3Reader reader2() {
+        return step3Reader;
     }
 }

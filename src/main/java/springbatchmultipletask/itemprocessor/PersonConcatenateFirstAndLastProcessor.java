@@ -12,6 +12,7 @@ public class PersonConcatenateFirstAndLastProcessor implements ItemProcessor<Per
     public Person process(Person person) throws Exception {
         person.setFirstLastName(person.getFirstName() + person.getLastName());
         log.info(person.toString());
+        Thread.sleep(1000);
         return person;
     }
 }

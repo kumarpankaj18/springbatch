@@ -5,28 +5,28 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
+import org.springframework.batch.item.file.mapping.DefaultLineMapper;
+import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.batch.item.support.SynchronizedItemStreamReader;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
+import springbatchmultiplesteps.constants.Constant;
 import springbatchmultiplesteps.domain.Person;
+import springbatchmultiplesteps.itemwriter.BaseItemWriter;
 
 @Component
-public class Step1Reader implements ItemReader<Person> {
+public class Step1Reader extends BaseItemReader{
 
 
-    static int count  = 10;
-    static int i = 0;
-    @Override
-    public Person read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException
-    {
-        String firstName = RandomStringUtils.random(10, true, false);
-        String lastName = RandomStringUtils.random(6, true, false);
-        for( ;i++<count;) {
-            return Person.builder()
-                    .firstName(firstName)
-                    .lastName(lastName)
-                    .build();
+        Resource inputResource =  new FileSystemResource(Constant.INPUT_PATH_1);
+
+        @Bean(name = "reader")
+        public SynchronizedItemStreamReader<Person> reader() {
+            return getReader(inputResource, new String[] { "rowNumber", "firstName", "lastName" });
         }
-        return null;
-    }
-
-
 }

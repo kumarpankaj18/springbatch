@@ -14,7 +14,7 @@ public class PersonConcatenateLastAndFirstProcessor implements ItemProcessor<Per
 
         person.setLastFirstName(person.getLastName() + person.getFirstName());
         log.info(person.toString());
-        Thread.sleep(1000);
+        //Thread.sleep(1000);
         return person;
     }
 }

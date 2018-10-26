@@ -5,7 +5,6 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.FlatFileItemWriter;
-import org.springframework.batch.item.file.builder.FlatFileItemReaderBuilder;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
 import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
@@ -20,6 +19,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
+import springbatchparallelchunks.constants.Constant;
 import springbatchparallelchunks.domain.Person;
 import springbatchparallelchunks.itemprocessor.PersonConcatenateFirstAndLastProcessor;
 import springbatchparallelchunks.itemprocessor.PersonConcatenateLastAndFirstProcessor;
@@ -47,7 +47,7 @@ public class Steps {
     @Autowired
     PersonConcatenateLastAndFirstProcessor personConcatenateLastAndFirstProcessor;
 
-    private Resource outputResource = new FileSystemResource("outputData.csv");
+    private Resource outputResource = new FileSystemResource(Constant.OUTPUT_PATH);
 
     @PostConstruct
     public void init () throws Exception{
@@ -56,15 +56,16 @@ public class Steps {
             file.delete();
             file.createNewFile();
         } else {
-            File file = new File( "outputData.csv");
+            File file = new File(Constant.OUTPUT_PATH);
             file.createNewFile();
         }
 
     }
+
     @Bean
     public Step step1() {
         return stepBuilderFactory.get("step1")
-                .<Person, Person>chunk(10)
+                .<Person, Person>chunk(5)
                 .reader(reader())
                 .processor(compositeItemProcessor())
                 .writer(writer())

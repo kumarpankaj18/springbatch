@@ -8,10 +8,19 @@ import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.file.FlatFileItemWriter;
+import org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor;
+import org.springframework.batch.item.file.transform.DelimitedLineAggregator;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import springbatchmultiplesteps.domain.Person;
+import springbatchmultiplesteps.constants.Constant;
 
 
+import javax.annotation.PostConstruct;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,34 +28,18 @@ import java.util.Optional;
 
 @Slf4j
 @Component
-public class PersonItemWriter implements ItemWriter<Person> , StepExecutionListener {
+public class PersonItemWriter  extends  BaseItemWriter{
 
-    private List<Person> personList;
+    private Resource outputResource = new FileSystemResource(Constant.OUTPUT_PATH_1);
 
-    @Override
-    public void write(List<? extends Person> items) throws Exception {
-        log.info(items.toString());
-        items.stream().forEach(System.out::println);
-        personList = Optional.ofNullable(personList).orElse(new ArrayList<>());
-        personList.addAll(items);
+    @PostConstruct
+    public void init () throws Exception{
+        baseInit(outputResource, Constant.OUTPUT_PATH_1);
+
     }
 
-    @Override
-    public void beforeStep(StepExecution stepExecution) {
-        return ;
-    }
-
-    @Override
-    public ExitStatus afterStep(StepExecution stepExecution){
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            String str = objectMapper.writeValueAsString(personList);
-            stepExecution.getJobExecution().getExecutionContext().put("step2", str);
-            stepExecution.getJobExecution().getExecutionContext().put("step3", str);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+    @Bean(name = "writer1")
+    public FlatFileItemWriter<Person> writer1() {
+        return writer(outputResource);
     }
 }

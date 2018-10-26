@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class Person {
+    private int rowNumber ;
     private String lastName;
     private String firstName;
 

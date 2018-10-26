@@ -25,13 +25,12 @@ public class Main implements CommandLineRunner {
         SpringApplication.run(Main.class, args);
     }
 
-
-
-
+    @Override
     public void run(String... args) throws Exception
     {
         JobParameters params = new JobParametersBuilder()
-                .addString("JobID", String.valueOf(System.currentTimeMillis()))
+                //.addString("JobID", String.valueOf(System.currentTimeMillis()))
+                .addString("JobID", "test7")
                 .toJobParameters();
         jobLauncher.run(job, params);
     }

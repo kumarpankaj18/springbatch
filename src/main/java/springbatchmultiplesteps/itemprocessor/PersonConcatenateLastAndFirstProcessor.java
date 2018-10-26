@@ -8,12 +8,19 @@ import springbatchmultiplesteps.domain.Person;
 @Component
 @Slf4j
 public class PersonConcatenateLastAndFirstProcessor implements ItemProcessor<Person, Person> {
+
+    static  int i =0;
     @Override
     public Person process(Person person) throws Exception {
 
+//        if(person.getRowNumber() == 4){
+//            log.info("retry processing {}", person);
+//            throw  new Exception();
+//        }
+
         person.setLastFirstName(person.getLastName() + person.getFirstName());
         log.info(person.toString());
-        Thread.sleep(1000);
+        //Thread.sleep(1000);
         return person;
     }
 }

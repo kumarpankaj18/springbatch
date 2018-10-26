@@ -9,42 +9,63 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
+import org.springframework.batch.item.file.mapping.DefaultLineMapper;
+import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.batch.item.support.SynchronizedItemStreamReader;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
+import springbatchmultiplesteps.constants.Constant;
 import springbatchmultiplesteps.domain.Person;
 
 import java.io.IOException;
 import java.util.List;
 
 @Component
-public class Step2Reader implements ItemReader<Person> , StepExecutionListener {
+public class Step2Reader  extends BaseItemReader {
 
-    private List<Person> personList;
 
-    @Override
-    public Person read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        if(personList !=null && personList.size()>0){
-            return personList.remove(0);
-        }
-        return null;
+    Resource inputResource =  new FileSystemResource(Constant.OUTPUT_PATH_1);
 
+
+    @Bean(name = "reader1")
+    public  SynchronizedItemStreamReader<Person> reader1() {
+        return getReader(inputResource, new String[]{"rowNumber", "firstName", "lastName", "firstLastName", "lastFirstName"});
     }
 
-    @Override
-    public void beforeStep(StepExecution stepExecution) {
-        String src =  stepExecution.getJobExecution().getExecutionContext().getString("step2");
-        ObjectMapper objectMapper = new ObjectMapper();
-        JavaType type = objectMapper.getTypeFactory().
-                constructCollectionType(List.class, Person.class);
-        try {
-            personList = objectMapper.readValue(src, type);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-    }
-
-    @Override
-    public ExitStatus afterStep(StepExecution stepExecution) {
-        return null;
-    }
+//    private List<Person> personList;
+//
+//
+//    @Override
+//    public Person read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
+//        if(personList !=null && personList.size()>0){
+//            return personList.remove(0);
+//        }
+//        return null;
+//
+//    }
+//
+//    @Override
+//    public void beforeStep(StepExecution stepExecution) {
+//        String src =  stepExecution.getJobExecution().getExecutionContext().getString("step2");
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        JavaType type = objectMapper.getTypeFactory().
+//                constructCollectionType(List.class, Person.class);
+//        try {
+//            personList = objectMapper.readValue(src, type);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
+//
+//    @Override
+//    public ExitStatus afterStep(StepExecution stepExecution) {
+//        return null;
+//    }
 }
